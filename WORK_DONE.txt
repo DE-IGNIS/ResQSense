@@ -1,0 +1,43 @@
+Now let me run all the tests:
+
+Ran run all tests · Exited with code 1
+
+65/66 tests pass. One minor test issue — the outlier detector test feeds identical values (`[50] * 15`), giving `std=0` which triggers the `std < 1e-6` guard. Let me fix both the detector logic and the test:
+
+Edited sensor_processor.py
+Ran re-run all tests
+
+**All 66 tests pass.** Now let me finalize with the ESP32 firmware reference, the README, and the .gitignore:
+
+Created PROTOCOL_SPEC.c
+Edited README.md
+Edited .gitignore
+
+All 10 steps are complete. Here's a summary of everything that was built:
+
+---
+
+## ✅ ResQSense Backend — Complete
+
+**66/66 tests passing.** Here's what was delivered:
+
+### Modules Built
+
+| Layer | File | What it does |
+|-------|------|-------------|
+| **Hardware** | [esp32.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/hardware/esp32.py) | Thread-safe serial connection with auto-reconnect, frame demultiplexing (LD2410D / MAX30100 / status channels), port auto-detection |
+| **Hardware** | [ld2410d.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/hardware/ld2410d.py) | Full LD2410D binary protocol — data-frame parser (standard + engineering mode), ACK parser, command builder (sensitivity, distance gates, firmware query, reset, restart) |
+| **Hardware** | [max30100.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/hardware/max30100.py) | JSON parser for ESP32 readings, host-side PPG processor with peak-detection BPM and Ratio-of-Ratios SpO₂ ($R = \frac{AC_{red}/DC_{red}}{AC_{ir}/DC_{ir}}$, SpO₂ ≈ 104 − 17R) |
+| **Core** | [detection.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/core/detection.py) | 4-tier presence state machine (NO_SIGNAL → EXPERIMENTAL → PROBABLE → CONFIRMED) with temporal dwell, energy thresholds, vital-sign promotion, and alert generation |
+| **Core** | [sensor_processor.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/core/sensor_processor.py) | Validation (range, staleness, rate), EMA smoothing, z-score outlier detection |
+| **Core** | [alerts.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/core/alerts.py) | Alert bus with subscriber fan-out, in-memory history, DB persistence, severity/zone queries |
+| **Core** | [backend_service.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/core/backend_service.py) | **The API your teammate uses** — single façade with callback registration (`on_radar_data`, `on_vitals_data`, `on_alert`, `on_connection_status`) + pull-based queries for zones, history, stats, and sensor commands |
+| **Database** | [storage.py](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/src/database/storage.py) | Thread-safe SQLite (WAL mode) with tables for search_zones, sensor_readings, alerts, system_events + indexing + pruning |
+| **Firmware** | [PROTOCOL_SPEC.c](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/firmware/PROTOCOL_SPEC.c) | Reference spec for the ESP32 firmware protocol |
+
+### Key Design Decisions
+
+- **Experimental vs Confirmed** is explicitly enforced — the detection engine requires sustained radar signal AND/OR vital-sign corroboration before escalating to `CONFIRMED`
+- **Offline mode** — if no ESP32 is found, the service starts anyway (UI can be developed without hardware)
+- Hardware ↔ business logic ↔ database are fully decoupled layers
+- All Himanshu needs is `from src.core.backend_service import BackendService` — see the [README](file:///home/rayne/Data/%5B02%5D%20PROJECTS/%5B04%5D%20COLLEGE%20PROJECTS/ResQSense/README.md) for the full integration guide
