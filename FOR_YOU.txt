@@ -1,0 +1,34 @@
+ResQSense/
+│
+├── main.py                    # Himanshu: application entry point
+├── requirements.txt           # You: dependency management
+├── README.md
+│
+├── src/
+│   ├── ui/                    # Himanshu: Flet dashboard
+│   │   ├── dashboard.py
+│   │   ├── components.py
+│   │   └── visualizations.py
+│   │
+│   ├── hardware/              # You: sensor communication
+│   │   ├── esp32.py
+│   │   ├── ld2410d.py
+│   │   └── max30100.py
+│   │
+│   ├── core/                  # You: processing and logic
+│   │   ├── detection.py
+│   │   ├── sensor_processor.py
+│   │   └── alerts.py
+│   │
+│   └── database/              # You: data persistence
+│       └── storage.py
+│
+├── tests/                     # You: backend tests
+├── firmware/                  # You: ESP32 firmware
+├── data/                      # Runtime data
+└── requirements.txt
+
+
+Sudarsh own hardware/, core/, database/, firmware/ and tests/.
+
+Himanshu owns ui/ and main.py.
