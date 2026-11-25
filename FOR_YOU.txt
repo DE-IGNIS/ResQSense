@@ -41,3 +41,27 @@ Our stack is:
 - MAX30100 — post-rescue heart rate and SpO₂
 - PySerial — ESP32 communication
 - SQLite — search-zone records
+
+
+Sudarsh — Backend & Hardware
+
+- ESP32 serial communication using PySerial.
+- HLK-LD2410D sensor data acquisition.
+- MAX30100 sensor data acquisition.
+- Sensor data parsing and validation.
+- Heart rate and SpO₂ processing.
+- Human presence detection logic.
+- Detection confidence and alert generation.
+- SQLite database and data persistence.
+- Backend APIs/interfaces for the UI.
+  
+Himanshu — UI & Application
+
+- Flet desktop application.
+- Dashboard layout and navigation.
+- Live sensor readings display.
+- Radar/presence visualization.
+- Alert and notification interface.
+- Search-zone management interface.
+- Historical data visualization.
+- Connection and sensor status indicators.
