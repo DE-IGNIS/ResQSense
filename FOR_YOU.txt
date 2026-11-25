@@ -32,3 +32,12 @@ ResQSense/
 Sudarsh own hardware/, core/, database/, firmware/ and tests/.
 
 Himanshu owns ui/ and main.py.
+
+Our stack is:
+- Python — application logic
+- Flet — desktop interface
+- ESP32-C6 — hardware controller
+- HLK-LD2410D — human presence detection beneath rubble
+- MAX30100 — post-rescue heart rate and SpO₂
+- PySerial — ESP32 communication
+- SQLite — search-zone records
