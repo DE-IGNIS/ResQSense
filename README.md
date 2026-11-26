@@ -14,7 +14,7 @@ A Python-based disaster rescue assistance system that helps rescue teams identif
 
 ```
 ResQSense/
-├── main.py                        # Application entry point
+├── main.py                        # Flet desktop application entry point
 ├── requirements.txt
 │
 ├── src/
@@ -29,6 +29,8 @@ ResQSense/
 │   │   ├── alerts.py              #   Alert fan-out & history management
 │   │   └── backend_service.py     #   Façade API for the frontend
 │   │
+│   ├── ui/                        # Flet desktop interface
+│   │   └── app.py                 # Dashboard, zones, alerts, history, sensors
 │   └── database/                  # Persistence layer
 │       └── storage.py             #   SQLite: zones, readings, alerts, events
 │
@@ -86,12 +88,17 @@ pip install -r requirements.txt
 # Run tests
 python -m pytest tests/ -v
 
-# Run backend (auto-detect ESP32)
+# Run desktop application (auto-detect ESP32; opens offline if none is found)
 python main.py
 
 # Run with explicit port
 python main.py --port /dev/ttyUSB0
 ```
+
+The desktop console includes an operations overview with radar and presence
+status, vital-sign cards, search-zone management, alert history, sensor
+readings, and connection details. Presence levels are shown using the backend
+classification (`NO_SIGNAL`, `EXPERIMENTAL`, `PROBABLE`, `CONFIRMED`).
 
 ## Frontend Integration
 
